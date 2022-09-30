@@ -21,9 +21,9 @@ WHERE Attrition = 'Yes'
 --Total Employees by Gender
 
 SELECT Gender, COUNT(*) as 'Total Employees by Gender', (SELECT COUNT(*)
-														FROM dbo.EmployeeAttrition b
-														WHERE b.Gender = a.Gender AND Attrition = 'Yes' 
-														) AS 'Attrition by Gender'
+							FROM dbo.EmployeeAttrition b
+						        WHERE b.Gender = a.Gender AND Attrition = 'Yes' 
+						        ) AS 'Attrition by Gender'
 FROM dbo.EmployeeAttrition a
 GROUP BY Gender
 
@@ -104,14 +104,14 @@ SELECT Distinct BusinessTravel, (SELECT Count(*)
 						  WHEN BusinessTravel = 'Non-Travel' THEN Count(*)
 						  ELSE NULL END as 'Number of Attrition Employees',
 			    CASE WHEN BusinessTravel = 'Travel_Frequently' THEN ROUND(Count(*)/(SELECT CAST(Count(*) as Float)
-																					FROM dbo.EmployeeAttrition b 
-																					WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
+												FROM dbo.EmployeeAttrition b 
+												WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
 					      WHEN BusinessTravel = 'Travel_Rarely' THEN ROUND(Count(*)/(SELECT CAST(Count(*) as Float)
-																				FROM dbo.EmployeeAttrition b 
-																				WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
+													FROM dbo.EmployeeAttrition b 
+													WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
 						  WHEN BusinessTravel = 'Non-Travel' THEN ROUND(Count(*)/(SELECT CAST(Count(*) as Float)
-																			FROM dbo.EmployeeAttrition b 
-																			WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
+													  FROM dbo.EmployeeAttrition b 
+													  WHERE b.BusinessTravel=a.BusinessTravel)*100,0)
 						  END as 'Percent of Total Employees That Travel by Category',
 				ROUND(AVG(MonthlyIncome),0) as 'Average Monthly Income'
 FROM dbo.EmployeeAttrition a
@@ -136,11 +136,11 @@ GROUP BY Department
 
 --Attrition Rate per Department
 SELECT DISTINCT Department, COUNT(*) as 'Employees by Department',(SELECT COUNT(*)
-																		FROM dbo.EmployeeAttrition b
-																		WHERE b.Department=a.Department AND Attrition = 'Yes') AS 'Attrition Employees by Department', 
-																				(SELECT CAST(COUNT(*) AS FLOAT)
-																				 FROM dbo.EmployeeAttrition b
-																				 WHERE b.Department=a.Department AND Attrition = 'Yes')/CAST(COUNT(*) AS FLOAT)*100 AS 'Attrition Rate of Total Education by Category'
+								   FROM dbo.EmployeeAttrition b
+								   WHERE b.Department=a.Department AND Attrition = 'Yes') AS 'Attrition Employees by Department', 
+										        (SELECT CAST(COUNT(*) AS FLOAT)
+											 FROM dbo.EmployeeAttrition b
+										         WHERE b.Department=a.Department AND Attrition = 'Yes')/CAST(COUNT(*) AS FLOAT)*100 AS 'Attrition Rate of Total Education by Category'
 FROM dbo.EmployeeAttrition a
 GROUP BY Department
 ORDER BY 'Employees by Department' desc
@@ -153,8 +153,8 @@ FROM dbo.EmployeeAttrition
 WHERE Attrition IN ('YES') 
 	AND Department LIKE 'Hu%'
 	AND MonthlyIncome <= (Select AVG(MonthlyIncome)
-						   FROM dbo.EmployeeAttrition
-						   WHERE Department LIKE 'Hum%')
+			      FROM dbo.EmployeeAttrition
+		              WHERE Department LIKE 'Hum%')
 	AND JobLevel = 1
 GROUP BY DEPARTMENT
 --10 of the 12 Attritions for Human Rerouces are due to Monthly Income being less than the Average and Job Level at 1.
@@ -189,16 +189,16 @@ GROUP BY CASE WHEN Age <= 29 THEN '18-29'
 ---EDUCATION
 
 SELECT DISTINCT EducationField, (SELECT COUNT(*) 
-								 FROM dbo.EmployeeAttrition b
-								 WHERE b.EducationField=a.EducationField) as 'Total Employees by Education Field', 
-									(SELECT ROUND(AVG(MonthlyIncome),0) 
-									 FROM dbo.EmployeeAttrition b
-									 WHERE b.EducationField=a.EducationField) as 'Average Monthly Income',
+				 FROM dbo.EmployeeAttrition b
+				 WHERE b.EducationField=a.EducationField) as 'Total Employees by Education Field', 
+				              (SELECT ROUND(AVG(MonthlyIncome),0) 
+						FROM dbo.EmployeeAttrition b
+						WHERE b.EducationField=a.EducationField) as 'Average Monthly Income',
 		COUNT(EducationField) as 'Attrition Employees by Education Field',
 		ROUND(AVG(MonthlyIncome),0) as 'Average Monthly Income of Attrition Employee',
 		100-(ROUND(AVG(MonthlyIncome),0)/(SELECT ROUND(AVG(MonthlyIncome),0) 
-									 FROM dbo.EmployeeAttrition b
-									 WHERE b.EducationField=a.EducationField)*100) AS 'Perfect Difference in Average Monthly Income Between Attrition and Non-Attrition Employees',
+						  FROM dbo.EmployeeAttrition b
+						  WHERE b.EducationField=a.EducationField)*100) AS 'Perfect Difference in Average Monthly Income Between Attrition and Non-Attrition Employees',
 		ROUND(AVG(Age),0) as 'Average age of Attrition Employee',
 		ROUND(AVG(JobLevel),0) as 'Average Job Level'
 FROM dbo.EmployeeAttrition a
@@ -207,14 +207,14 @@ GROUP BY EducationField
 
 
 SELECT DISTINCT Education, COUNT(*) as 'Employees by Education Level', ROUND(AVG(MonthlyIncome),0) as 'Average Monthly Income', (SELECT COUNT(*)
-																		FROM dbo.EmployeeAttrition b
-																		WHERE b.Education=a.Education AND Attrition = 'Yes') AS 'Attrition employees by Education',
-																				(SELECT ROUND(AVG(MonthlyIncome),0)
-																				 FROM dbo.EmployeeAttrition b
-																				 WHERE b.Education=a.Education AND Attrition = 'Yes') as 'Average Monthly Income of Attrition Employees',
-																				    100-(SELECT ROUND(AVG(MonthlyIncome),0)
-																					FROM dbo.EmployeeAttrition b
-																					WHERE b.Education=a.Education AND Attrition = 'Yes')/ROUND(AVG(MonthlyIncome),0)*100 'Perfect Difference in Average Monthly Income Between Attrition and Non-Attrition Employees',
+																FROM dbo.EmployeeAttrition b
+																WHERE b.Education=a.Education AND Attrition = 'Yes') AS 'Attrition employees by Education',
+																		(SELECT ROUND(AVG(MonthlyIncome),0)
+																		 FROM dbo.EmployeeAttrition b
+																		 WHERE b.Education=a.Education AND Attrition = 'Yes') as 'Average Monthly Income of Attrition Employees',
+																		              100-(SELECT ROUND(AVG(MonthlyIncome),0)
+																				   FROM dbo.EmployeeAttrition b
+																				   WHERE b.Education=a.Education AND Attrition = 'Yes')/ROUND(AVG(MonthlyIncome),0)*100 'Perfect Difference in Average Monthly Income Between Attrition and Non-Attrition Employees',
 																						(SELECT CAST(COUNT(*) AS FLOAT)
 																						 FROM dbo.EmployeeAttrition b
 																						 WHERE b.Education=a.Education AND Attrition = 'Yes')/CAST(COUNT(*) AS FLOAT)*100 AS 'Attrition Rate of Total Education by Category',  
@@ -235,13 +235,13 @@ ORDER BY 'Employees by Education Level' desc
 SELECT JobSatisfaction, JobInvolvement, count(*)
 FROM dbo.EmployeeAttrition
 WHERE Attrition = 'Yes' and MonthlyIncome > (SELECT AVG(MonthlyIncome)
-											  FROM dbo.EmployeeAttrition)
+					     FROM dbo.EmployeeAttrition)
 GROUP BY JobSatisfaction, JobInvolvement
 
 SELECT JobSatisfaction, JobInvolvement, count(*)
 FROM dbo.EmployeeAttrition
 WHERE Attrition = 'Yes' AND MonthlyIncome < (SELECT AVG(MonthlyIncome)
-											  FROM dbo.EmployeeAttrition)
+					     FROM dbo.EmployeeAttrition)
 GROUP BY JobSatisfaction, JobInvolvement
 
 --These two tables show if attrition employees make a Monthly Income less than or greater than the average company pay. 
